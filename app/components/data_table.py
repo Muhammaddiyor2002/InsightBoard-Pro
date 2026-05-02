@@ -82,6 +82,9 @@ class DataTableViewer:
     def _navigate(self, delta: int) -> None:
         self.page_index = max(0, min(self.total_pages - 1, self.page_index + delta))
         self._refresh()
+        if self._table.page:
+            self._table.update()
+            self._page_label.update()
 
     def _refresh(self) -> None:
         if self.df.empty:

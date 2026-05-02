@@ -98,8 +98,6 @@ class Exporter:
         for col, dtype in df.dtypes.items():
             lines.append(f"  - {col} :: {dtype}")
         lines.append("")
-        if any(True for _ in insights):
-            pass
         ins_list = list(insights)
         if ins_list:
             lines.append("Auto-Insights:")

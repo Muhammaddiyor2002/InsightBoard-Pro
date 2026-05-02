@@ -57,3 +57,16 @@ def test_filter_serialization_roundtrip() -> None:
 def test_filter_engine_no_op_for_empty_filter(sample_df: pd.DataFrame) -> None:
     out = FilterEngine().apply(sample_df, Filter())
     assert len(out) == len(sample_df)
+
+
+def test_filter_text_search_works_with_string_dtype() -> None:
+    """Text search should find matches in StringDtype columns, not just object dtype."""
+    df = pd.DataFrame(
+        {
+            "name": pd.array(["Alice", "Bob", "alibaba"], dtype="string"),
+            "value": [1, 2, 3],
+        }
+    )
+    out = FilterEngine().apply(df, Filter(text_search="ali"))
+    assert len(out) == 2
+    assert set(out["name"]) == {"Alice", "alibaba"}

@@ -121,9 +121,9 @@ class FileLoader:
         df = df.rename(columns=lambda c: str(c).strip())
         for col in df.select_dtypes(include="object").columns:
             df[col] = df[col].astype("string").str.strip()
-        # Best-effort datetime parse for object columns whose string
+        # Best-effort datetime parse for text columns whose string
         # representation matches common date formats.
-        for col in df.select_dtypes(include="object").columns:
+        for col in df.select_dtypes(include=["object", "string"]).columns:
             sample = df[col].dropna().astype(str).head(20)
             if sample.empty:
                 continue

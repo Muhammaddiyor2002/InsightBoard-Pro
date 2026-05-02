@@ -36,6 +36,20 @@ def test_export_text_summary(sample_df: pd.DataFrame, tmp_path: Path) -> None:
     assert "Top region" in body
 
 
+def test_export_text_summary_handles_generator(sample_df: pd.DataFrame, tmp_path: Path) -> None:
+    """Generators must not lose insights to a dead any() probe."""
+    e = Exporter(tmp_path)
+
+    def gen():
+        yield Insight("First", "first detail", "trend", 0.9)
+        yield Insight("Second", "second detail", "top", 0.8)
+
+    p = e.export_text_summary(sample_df, insights=gen())
+    body = p.read_text()
+    assert "First" in body
+    assert "Second" in body
+
+
 def test_export_pdf(sample_df: pd.DataFrame, tmp_path: Path) -> None:
     e = Exporter(tmp_path)
     insights = [Insight("Trend", "rising", "trend", 0.7)]

@@ -99,7 +99,9 @@ class FilterEngine:
         # text search across selected columns (or all object columns when empty)
         if flt.text_search:
             cols = flt.text_columns or [
-                c for c in out.columns if pd.api.types.is_object_dtype(out[c])
+                c
+                for c in out.columns
+                if pd.api.types.is_object_dtype(out[c]) or pd.api.types.is_string_dtype(out[c])
             ]
             if cols:
                 pat = flt.text_search
